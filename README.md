@@ -11,7 +11,6 @@ How to run api application:
        - run `go run cmd/api/main.go` or `go build -o bin/api cmd/api/main.go` for building binary, by default will run on port `8080`
        - if you run `go build` then you should run `./bin/api`
        - import postman collection `PackformServer.postman_environment.json` to your own postman
-   - Docker Compose
 
 How to run cli application:
    - Local Development

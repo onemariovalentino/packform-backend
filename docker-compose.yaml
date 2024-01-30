@@ -1,23 +1,5 @@
 version: "3.8"
 services:
-    api:
-        build: .
-        container_name: packform-api
-        ports :
-            - 8080:8080
-        networks:
-            - datasource
-        restart: on-failure
-        env_file: .env
-        command: ["sh", "-c", "./api"]
-    cli:
-        build: .
-        container_name: packform-cli
-        networks:
-            - datasource
-        restart: on-failure
-        env_file: .env
-        command: ["sh", "-c", "./cli"]
     postgres:
         image: postgres:latest
         restart: always
@@ -35,6 +17,32 @@ services:
             - POSTGRES_PASSWORD=${DB_PASSWORD}
             - POSTGRES_DB=${DB_NAME}
             - POSTGRES_INITDB_ARGS="--auth-host=scram-sha-256"
+    api:
+        build: .
+        container_name: packform-api
+        ports :
+            - 8080:8080
+        networks:
+            - datasource
+        restart: on-failure
+        env_file: .env
+        command: ["./api"]
+    cli:
+        build: .
+        container_name: packform-cli
+        networks:
+            - datasource
+        restart: on-failure
+        env_file: .env
+        command: > 
+            sh -c './cli import -d companies -f files/csv/Test\ task\ -\ Postgres\ -\ customer_companies.csv &&
+            ./cli import -d customers -f files/csv/Test\ task\ -\ Postgres\ -\ customers.csv &&
+            ./cli import -d orders -f files/csv/Test\ task\ -\ Postgres\ -\ orders.csv &&
+            ./cli import -d order_items -f files/csv/Test\ task\ -\ Postgres\ -\ order_items.csv &&
+            ./cli import -d order_item_deliveries -f files/csv/Test\ task\ -\ Postgres\ -\ deliveries.csv'
+        volumes:
+        - ./cmd/cli:/app
+        
 networks:
   datasource:
       driver: bridge

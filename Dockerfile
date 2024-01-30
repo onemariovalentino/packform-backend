@@ -11,15 +11,12 @@ RUN CGO_ENABLED=0 GOOS=linux go build -v -installsuffix 'static' -o api cmd/api/
 RUN CGO_ENABLED=0 GOOS=linux go build -v -installsuffix 'static' -o cli cmd/api/main.go
 
 
-FROM gcr.io/distroless/base-debian11 AS build-release-stage
+FROM alpine:latest
 
 WORKDIR /usr/bin
 
 COPY --from=build-stage /build/api .
 COPY --from=build-stage /build/cli .
+COPY --from=build-stage /build/files/csv /files/csv
 
-EXPOSE 8080
-
-USER nonroot:nonroot
-
-CMD ["sh", "-c", "./api"] --v
+CMD ["./api"] --v
