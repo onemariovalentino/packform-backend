@@ -1,0 +1,42 @@
+version: "3.8"
+services:
+    api:
+        build: .
+        container_name: packform-api
+        ports :
+            - 8080:8080
+        networks:
+            - datasource
+        restart: on-failure
+        env_file: .env
+        command: ["sh", "-c", "./api"]
+    cli:
+        build: .
+        container_name: packform-cli
+        networks:
+            - datasource
+        restart: on-failure
+        env_file: .env
+        command: ["sh", "-c", "./cli"]
+    postgres:
+        image: postgres:latest
+        restart: always
+        container_name: postgresdb
+        ports:
+            - 5432:5432
+        networks:
+            - datasource
+        env_file: .env
+        volumes: 
+            - db:/var/lib/postgresql/data
+            - ./files/sql/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+        environment:
+            - POSTGRES_USER=${DB_USERNAME}
+            - POSTGRES_PASSWORD=${DB_PASSWORD}
+            - POSTGRES_DB=${DB_NAME}
+            - POSTGRES_INITDB_ARGS="--auth-host=scram-sha-256"
+networks:
+  datasource:
+      driver: bridge
+volumes:
+  db:

@@ -1,0 +1,1 @@
+CREATE TYPE product_kind AS ENUM ('Corrugated Box','Hand Sanitizer');
