@@ -40,7 +40,7 @@ func (u *OrderUsecase) FeedingDataFromCSV(ctx context.Context, destination strin
 
 	for _, file := range files {
 		wg.Add(1)
-		go func(file string, successCh chan<- string, errCh chan<- error) {
+		go func(wg *sync.WaitGroup, file string, successCh chan<- string, errCh chan<- error) {
 			defer wg.Done()
 
 			csvReader, csvFile, err := helper.ReadCsvFile(file)
@@ -58,11 +58,11 @@ func (u *OrderUsecase) FeedingDataFromCSV(ctx context.Context, destination strin
 				}
 
 				wg.Add(1)
-				u.getCustomerCompanies(&wg, workerChans, errCh, csvReader)
+				u.getCustomerCompanies(wg, workerChans, errCh, csvReader)
 
 				for i := 0; i < numWorkers; i++ {
 					wg.Add(1)
-					go u.createCustomerCompanies(ctx, i, workerChans[i], &wg, errCh)
+					go u.createCustomerCompanies(ctx, i, workerChans[i], wg, errCh)
 				}
 
 				successCh <- "success to insert companies"
@@ -74,11 +74,11 @@ func (u *OrderUsecase) FeedingDataFromCSV(ctx context.Context, destination strin
 				}
 
 				wg.Add(1)
-				u.getCustomers(&wg, workerChans, errCh, csvReader)
+				u.getCustomers(wg, workerChans, errCh, csvReader)
 
 				for i := 0; i < numWorkers; i++ {
 					wg.Add(1)
-					go u.createCustomers(ctx, i, workerChans[i], &wg, errCh)
+					go u.createCustomers(ctx, i, workerChans[i], wg, errCh)
 				}
 
 				successCh <- "success to insert customers"
@@ -90,14 +90,15 @@ func (u *OrderUsecase) FeedingDataFromCSV(ctx context.Context, destination strin
 				}
 
 				wg.Add(1)
-				u.getOrders(&wg, workerChans, errCh, csvReader)
+				u.getOrders(wg, workerChans, errCh, csvReader)
 
 				for i := 0; i < numWorkers; i++ {
 					wg.Add(1)
-					go u.createOrders(ctx, i, workerChans[i], &wg, errCh)
+					go u.createOrders(ctx, i, workerChans[i], wg, errCh)
 				}
 
 				successCh <- "success to insert orders"
+
 			case "order_items":
 				workerChans := make([]chan []*models.OrderItem, numWorkers)
 				for i := range workerChans {
@@ -105,14 +106,15 @@ func (u *OrderUsecase) FeedingDataFromCSV(ctx context.Context, destination strin
 				}
 
 				wg.Add(1)
-				u.getOrderItems(&wg, workerChans, errCh, csvReader)
+				u.getOrderItems(wg, workerChans, errCh, csvReader)
 
 				for i := 0; i < numWorkers; i++ {
 					wg.Add(1)
-					go u.createOrderItems(ctx, i, workerChans[i], &wg, errCh)
+					go u.createOrderItems(ctx, i, workerChans[i], wg, errCh)
 				}
 
 				successCh <- "success to insert order items"
+
 			case "order_item_deliveries":
 				workerChans := make([]chan []*models.OrderItemDelivery, numWorkers)
 				for i := range workerChans {
@@ -120,19 +122,20 @@ func (u *OrderUsecase) FeedingDataFromCSV(ctx context.Context, destination strin
 				}
 
 				wg.Add(1)
-				u.getOrderItemDeliveries(&wg, workerChans, errCh, csvReader)
+				u.getOrderItemDeliveries(wg, workerChans, errCh, csvReader)
 
 				for i := 0; i < numWorkers; i++ {
 					wg.Add(1)
-					go u.createOrderItemDeliveries(ctx, i, workerChans[i], &wg, errCh)
+					go u.createOrderItemDeliveries(ctx, i, workerChans[i], wg, errCh)
 				}
 
 				successCh <- "success to insert order item deliveries"
+
 			default:
 				errCh <- errors.New(`unknown command`)
 				return
 			}
-		}(file, successCh, errCh)
+		}(&wg, file, successCh, errCh)
 	}
 	wg.Wait()
 	close(successCh)

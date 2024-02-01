@@ -7,16 +7,17 @@ COPY . .
 
 RUN go mod tidy 
 
-RUN CGO_ENABLED=0 GOOS=linux go build -v -installsuffix 'static' -o api cmd/api/main.go
-RUN CGO_ENABLED=0 GOOS=linux go build -v -installsuffix 'static' -o cli cmd/api/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -v -installsuffix 'static' -o app cmd/app/main.go
 
 
 FROM alpine:latest
 
+RUN apk update && apk add bash && apk --no-cache add tzdata
+
 WORKDIR /usr/bin
 
-COPY --from=build-stage /build/api .
-COPY --from=build-stage /build/cli .
-COPY --from=build-stage /build/files/csv /files/csv
+COPY --from=build-stage /build/app .
+COPY --from=build-stage /build/files/csv files/csv
 
-CMD ["./api"] --v
+RUN chmod +x ./app
+CMD ["./app"] --v

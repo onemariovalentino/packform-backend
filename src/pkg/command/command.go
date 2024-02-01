@@ -19,7 +19,10 @@ func New() *Command {
 	services := di.NewDependency()
 
 	importCmd := &cobra.Command{
-		Use:   "import",
+		Use: "import-csv",
+		Annotations: map[string]string{
+			cobra.CommandDisplayNameAnnotation: "import csv",
+		},
 		Short: "Import data into a table from CSV file(s)",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx := context.Background()
@@ -34,12 +37,12 @@ func New() *Command {
 			return nil
 		},
 	}
-	importCmd.Flags().StringP("destination", "d", "", "Destination for save to table")
+	importCmd.Flags().StringP("destination", "d", "", "Destination for save to table [companies|customers|orders|order_items|order_item_deliveries]")
 	importCmd.Flags().StringArrayP("files", "f", []string{}, "Files to import")
 	importCmd.MarkFlagRequired("destination")
 	importCmd.MarkFlagRequired("files")
 
-	rootCmd := &cobra.Command{Use: "cli"}
+	rootCmd := &cobra.Command{Use: "app"}
 	rootCmd.AddCommand(importCmd)
 
 	return &Command{comm: rootCmd}
