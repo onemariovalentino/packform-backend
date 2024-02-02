@@ -9,7 +9,6 @@ import (
 
 	"github.com/gin-contrib/requestid"
 	"github.com/gin-gonic/gin"
-	"github.com/spf13/cast"
 )
 
 type (
@@ -23,7 +22,7 @@ func NewOrderHTTPHandler(usecase usecases.OrderUsecaseInterface) *orderHTTPHandl
 }
 
 func (h *orderHTTPHandler) Mount(g *gin.Engine) {
-	g.GET("/orders", h.GetOrders)
+	g.POST("/orders", h.GetOrders)
 }
 
 func (h *orderHTTPHandler) GetOrders(c *gin.Context) {
@@ -38,11 +37,11 @@ func (h *orderHTTPHandler) GetOrders(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, resp)
 		return
 	}
-	perPage := cast.ToInt(c.Query("per_page"))
+	perPage := req.PerPage
 	if perPage == 0 || perPage > 50 {
 		perPage = 5
 	}
-	page := cast.ToInt(c.Query("page"))
+	page := req.Page
 	if page == 0 || page < 1 {
 		page = 1
 	}
@@ -52,13 +51,14 @@ func (h *orderHTTPHandler) GetOrders(c *gin.Context) {
 		st, _ := time.Parse("2006-01-02", req.StartDate)
 		start = st.In(tz)
 	}
+
 	var end time.Time
 	if req.EndDate != "" {
 		et, _ := time.Parse("2006-01-02", req.EndDate)
 		end = et.In(tz)
 	}
 
-	result, err := h.usecase.GetOrderDetails(c, req.Search, start.In(time.UTC), end.In(time.UTC), page, perPage)
+	result, err := h.usecase.GetOrderDetails(c, req.Search, start.In(time.UTC), end.In(time.UTC), page, perPage, req.SortDirection)
 	if err != nil {
 		resp := helper.NewResponse(http.StatusNotFound, ``, err.Error(), nil)
 		resp.RequestID = reqID
@@ -66,7 +66,7 @@ func (h *orderHTTPHandler) GetOrders(c *gin.Context) {
 		return
 	}
 
-	resp := helper.NewResponse(http.StatusOK, `success to get order details`, "", result)
+	resp := helper.NewResponse(http.StatusOK, `success to get orders`, "", result)
 	resp.RequestID = reqID
 	c.JSON(http.StatusOK, resp)
 }

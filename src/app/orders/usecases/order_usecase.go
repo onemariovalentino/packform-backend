@@ -26,8 +26,8 @@ func New(query queries.OrderQueryInterface) OrderUsecaseInterface {
 	return &OrderUsecase{query: query}
 }
 
-func (u *OrderUsecase) GetOrderDetails(ctx context.Context, search string, startDate, endDate time.Time, page, perPage int) ([]*models.OrderDetails, error) {
-	return u.query.GetOrderDetails(ctx, search, startDate, endDate, page, perPage)
+func (u *OrderUsecase) GetOrderDetails(ctx context.Context, search string, startDate, endDate time.Time, page, perPage int, sortDirection string) (*models.OrderDetails, error) {
+	return u.query.GetOrderDetails(ctx, search, startDate, endDate, page, perPage, sortDirection)
 }
 
 func (u *OrderUsecase) FeedingDataFromCSV(ctx context.Context, destination string, files []string) error {

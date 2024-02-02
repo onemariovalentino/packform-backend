@@ -1,7 +1,6 @@
 package models
 
 import (
-	"database/sql"
 	"database/sql/driver"
 	"time"
 )
@@ -63,13 +62,21 @@ type (
 		DeliveredQty int `gorm:"column:delivered_quantity;type:int"`
 	}
 
+	OrderDetail struct {
+		OrderID         int64     `json:"order_id" gorm:"column:order_id"`
+		OrderName       string    `json:"order_name" gorm:"column:order_name"`
+		Product         string    `json:"product" gorm:"column:product_name"`
+		CompanyName     string    `json:"company_name" gorm:"column:company_name"`
+		CustomerName    string    `json:"customer_name" gorm:"column:customer_name"`
+		OrderDate       time.Time `json:"order_date" gorm:"column:order_date"`
+		DeliveredAmount float64   `json:"delivered_amount" gorm:"column:delivered_amount"`
+		TotalAmount     float64   `json:"total_amount" gorm:"column:total_amount"`
+	}
+
 	OrderDetails struct {
-		OrderName       string          `json:"order_name" gorm:"column:order_name"`
-		CompanyName     string          `json:"company_name" gorm:"column:company_name"`
-		CustomerName    string          `json:"customer_name" gorm:"column:customer_name"`
-		OrderDate       time.Time       `json:"order_date" gorm:"column:order_date"`
-		DeliveredAmount sql.NullFloat64 `json:"delivered_amount" gorm:"column:delivered_amount"`
-		TotalAmount     float64         `json:"total_amount" gorm:"column:total_amount"`
+		TotalData   int            `json:"total_data"`
+		TotalAmount float64        `json:"total_amount"`
+		Orders      []*OrderDetail `json:"orders"`
 	}
 )
 

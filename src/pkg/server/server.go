@@ -9,6 +9,7 @@ import (
 	"packform-backend/src/app/orders/handlers"
 	"packform-backend/src/pkg/config"
 	"packform-backend/src/pkg/di"
+	"packform-backend/src/pkg/middlewares"
 	"syscall"
 	"time"
 
@@ -39,6 +40,7 @@ func New() *Server {
 	g := gin.Default()
 	g.Use(gin.Recovery())
 	g.Use(requestid.New())
+	g.Use(middlewares.CORSMiddleware())
 	orderHTTPHandler := handlers.NewOrderHTTPHandler(services.OrderUsecase)
 	orderHTTPHandler.Mount(g)
 
