@@ -111,7 +111,6 @@ func (q *OrderQuery) GetOrderDetails(ctx context.Context, search string, startDa
 		orders = append(orders, orderDetail)
 	}
 
-	fmt.Println(querySum)
 	var grandTotalAmount float64
 	rs, err = q.db.Raw(querySum).Rows()
 	if err != nil {
