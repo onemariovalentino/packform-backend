@@ -1,0 +1,42 @@
+{
+	"info": {
+		"_postman_id": "67233a2e-9569-4ae4-aa9a-07e80d525eac",
+		"name": "packform",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31307358"
+	},
+	"item": [
+		{
+			"name": "orders",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"search\":\"\",\n    \"start_date\":\"\",\n    \"end_date\":\"\",\n    \"sort_direction\":\"asc\",\n    \"page\":1,\n    \"per_page\":5\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/orders",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
