@@ -9,7 +9,7 @@
        - copy `.env.sample` to `.env`, and fill with your own setting
        - set `DB_HOST=localhost`, to read db host from your local db
        - set `APP_PLATFORM=local`, to include gorm auto migration
-       - set `POPULATE_DATA_FROM=api`, to populate data directly via api server, populate can only run once whether via api server or cli, so make sure you drop all tables first if you want to test both, rebuild golang required if you change to `POPULATE_DATA_FROM=cli`
+       - set `POPULATE_DATA_FROM=cli` (default configuration), used to populate data via cli you can read cli instruction, if you set `POPULATE_DATA_FROM=api` it means directly insert data when api server start which can make error every time you rebuild golang, so set `POPULATE_DATA_FROM=cli` after you run `POPULATE_DATA_FROM=api`, it will skip insert data every server run. populate can only run one once whether api or cli.
        - run `go mod tidy` for install all related library
        - run `go run cmd/app/main.go` or `go build -o bin/app cmd/app/main.go`
        - if `go build` then you should run `./bin/app` for running api
@@ -19,7 +19,7 @@
    - Docker Compose
        - set `DB_HOST=postgres`, to read db host from docker service
        - set `APP_PLATFORM=docker`, to skip gorm auto migration, because using `init.sql` to create table
-       - set `POPULATE_DATA_FROM=api`, to populate data directly via api server, populate can only run once whether via api server or cli, so make sure you drop all tables first if you want to test both, rebuild docker compose required if change to `POPULATE_DATA_FROM=cli`
+       - set `POPULATE_DATA_FROM=cli` (default configuration), used to populate data via cli you can read cli instruction, if you set `POPULATE_DATA_FROM=api` it means directly insert data when api server start which can make error every time you rebuild golang, so set `POPULATE_DATA_FROM=cli` after you run `POPULATE_DATA_FROM=api`, it will skip insert data every server run. populate can only run one once whether api or cli.
        - run `docker compose up`, then waiting until finish
        - set url variable in postman `http://localhost:8080` or `http://0.0.0.0:8080`
        - import postman collection `PackformServer.postman_environment.json` to your own postman
@@ -30,7 +30,7 @@
        - copy `.env.sample` to `.env`, and fill with your own setting.
        - run `go mod tidy` for install all related library
        - set `DB_HOST=localhost`, to read db host from your local db
-       - set `POPULATE_DATA_FROM=cli`, to populate data directly via api server, populate can only run once whether via api server or cli, so make sure you drop all tables first if you want to test both, rebuild golang required if you change to `POPULATE_DATA_FROM=api`
+       - set `POPULATE_DATA_FROM=cli` (default configuration), used to populate data via cli you can read cli instruction, if you set `POPULATE_DATA_FROM=api` it means directly insert data when api server start which can make error every time you rebuild golang, so set `POPULATE_DATA_FROM=cli` after you run `POPULATE_DATA_FROM=api`, it will skip insert data every server run. populate can only run one once whether api or cli.
        - run `go run cmd/app/main.go` or `go build -o bin/app cmd/app/main.go`
        - run `./bin/app import-csv -d [destination_table] -f [csv_files]` for populate csv file to postgres, please run it sequentially command below:
            - will be inserted to tbl_companies
@@ -61,7 +61,7 @@
    - Docker Compose
        - set `DB_HOST=postgres`, to read db host from docker service
        - set `APP_PLATFORM=docker`, to skip gorm auto migration, because using `init.sql` to create table
-       - set `POPULATE_DATA_FROM=cli`, to populate data directly via api server, populate can only run once whether via api server or cli, so make sure you drop all tables first if you want to test both, rebuild docker compose required if change to `POPULATE_DATA_FROM=api`
+       - set `POPULATE_DATA_FROM=cli` (default configuration), used to populate data via cli you can read cli instruction, if you set `POPULATE_DATA_FROM=api` it means directly insert data when api server start which can make error every time you rebuild golang, so set `POPULATE_DATA_FROM=cli` after you run `POPULATE_DATA_FROM=api`, it will skip insert data every server run. populate can only run one once whether api or cli.
        - run command `docker compose exec -it app bash`, then run the command below in order
            - will be inserted to tbl_companies
            ```sh 

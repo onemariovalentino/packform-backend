@@ -21,6 +21,12 @@ func NewDependency() *Dependency {
 
 	orderQuery := queries.New(gormDB)
 	orderUsecase := usecases.New(orderQuery)
+
+	// if you set `POPULATE_DATA_FROM=api` it means directly insert data when api server start
+	// which can make error every time you rebuild golang because it will try insert existing data
+	// so set `POPULATE_DATA_FROM=cli` after you run `POPULATE_DATA_FROM=api`
+	// it will skip insert data every server run
+	// populate can only run one once whether api or cli, you should drop all tables if you test both
 	if config.Env.PopulateDataFrom == "api" {
 		ctx := context.Background()
 		orderUsecase.FeedingDataFromCSV(ctx, "companies", []string{`files/csv/Test task - Postgres - customer_companies.csv`})
