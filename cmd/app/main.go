@@ -29,6 +29,7 @@ func main() {
 	fmt.Printf("environment APP_ENV=%s\n", env)
 
 	if len(os.Args) > 1 {
+		config.Env.PopulateDataFrom = "cli"
 		cli := command.New()
 		cli.Run()
 	} else {

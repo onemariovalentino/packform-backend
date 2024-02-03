@@ -10,11 +10,12 @@ import (
 
 type (
 	AppConfig struct {
-		Name        string `env:"APP_NAME"`
-		Environment string `env:"APP_ENV"`
-		Port        int    `env:"APP_PORT"`
-		Platform    string `env:"APP_PLATFORM"`
-		DbConfig    *DbConfig
+		Name             string `env:"APP_NAME"`
+		Environment      string `env:"APP_ENV"`
+		Port             int    `env:"APP_PORT"`
+		Platform         string `env:"APP_PLATFORM"`
+		PopulateDataFrom string `env:"POPULATE_DATA_FROM"`
+		DbConfig         *DbConfig
 	}
 
 	DbConfig struct {
