@@ -25,7 +25,10 @@ How to run cli application:
        - run ```sh go mod tidy``` for install all related library
        - run ```sh go run cmd/app/main.go``` or ```sh go build -o bin/app cmd/app/main.go``` for building binary, by default will run on port `8080`
        - run ```sh ./bin/app import-csv -d [destination_table] -f [csv_files]``` for populate csv file to postgres, please run it sequentially command below:
-           - ```sh ./bin/app import-csv -d companies -f files/csv/Test\ task\ -\ Postgres\ -\ customer_companies.csv``` -> will be inserted to `tbl_companies`
+           ```sh 
+           ./bin/app import-csv -d companies -f files/csv/Test\ task\ -\ Postgres\ -\ customer_companies.csv
+           ``` 
+           -> will be inserted to `tbl_companies`
            - ```sh ./bin/app import-csv -d customers -f files/csv/Test\ task\ -\ Postgres\ -\ customers.csv``` -> will be inserted to `tbl_customers`
            - ```sh ./bin/app import-csv -d orders -f files/csv/Test\ task\ -\ Postgres\ -\ orders.csv``` -> will be inserted to `tbl_orders`
            - ```sh ./bin/app import-csv -d order_items -f files/csv/Test\ task\ -\ Postgres\ -\ order_items.csv``` -> will be inserted to `tbl_order_items`
