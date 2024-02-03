@@ -3,7 +3,6 @@ module packform-backend
 go 1.21.1
 
 require (
-	github.com/gin-contrib/cors v1.5.0
 	github.com/gin-contrib/requestid v0.0.6
 	github.com/gin-gonic/gin v1.9.1
 	github.com/jackc/pgx/v5 v5.5.2

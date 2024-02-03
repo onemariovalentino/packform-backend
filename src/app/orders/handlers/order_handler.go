@@ -30,7 +30,7 @@ func (h *orderHTTPHandler) GetOrders(c *gin.Context) {
 
 	tz, _ := time.LoadLocation("Australia/Melbourne")
 
-	req := schemas.OrderRequest{}
+	var req schemas.OrderRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		resp := helper.NewResponse(http.StatusBadRequest, ``, err.Error(), nil)
 		resp.RequestID = reqID
@@ -38,7 +38,7 @@ func (h *orderHTTPHandler) GetOrders(c *gin.Context) {
 		return
 	}
 	perPage := req.PerPage
-	if perPage == 0 || perPage > 50 {
+	if perPage == 0 || perPage > 100 {
 		perPage = 5
 	}
 	page := req.Page

@@ -12,8 +12,9 @@ How to run api application:
        - if you run `go build` then you should run `./bin/app`
        - import postman collection `PackformServer.postman_environment.json` to your own postman
    - Docker Compose
-       - run `docker compose up`, then waiting until finish
        - change `DB_HOST` value to `postgres` which taken from docker compose service
+       - change `APP_PLATFORM` value to `docker`
+       - run `docker compose up`, then waiting until finish
        - first run cli application for populate data
        - import postman collection `PackformServer.postman_environment.json` to your own postman
 
@@ -33,7 +34,9 @@ How to run cli application:
        - note:
          - set your postgres timezone to `UTC`, you can run `show timezone;` for seeing current timezone, then run `set timezone="UTC";` to set to UTC timezone
          - data will be inserted not in order because import data using go channel and go routine
+   
    - Docker Compose
+       - change `APP_PLATFORM` value to `docker`
        - run command `docker compose exec -it app bash`, then run the command below in order
            - `app import-csv -d companies -f files/csv/Test\ task\ -\ Postgres\ -\ customer_companies.csv` -> will be insert to `tbl_companies`
            - `app import-csv -d customers -f files/csv/Test\ task\ -\ Postgres\ -\ customers.csv` -> will be insert to `tbl_customers`

@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"packform-backend/src/app/orders/models"
+	"packform-backend/src/pkg/helper"
 	"time"
 
 	"gorm.io/gorm"
@@ -104,7 +105,7 @@ func (q *OrderQuery) GetOrderDetails(ctx context.Context, search string, startDa
 			Product:         productName,
 			CompanyName:     companyName,
 			CustomerName:    customerName,
-			OrderDate:       dt.In(tz),
+			OrderDate:       helper.ToOrdinalDate(dt.In(tz)),
 			DeliveredAmount: deliveredAmount.Float64,
 			TotalAmount:     totalAmount,
 		}
